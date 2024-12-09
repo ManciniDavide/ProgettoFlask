@@ -1,32 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista della Spesa</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+    
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+    
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    
+        li span {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+            flex-grow: 1; /* Questo garantisce che il testo occupi tutto lo spazio disponibile */
+        }
+    
+        button {
+            background: linear-gradient(135deg, #ff6f61, #ff3a29);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin-left: 10px; /* Spazio tra il testo e il bottone */
+        }
+    
+        button:hover {
+            background: linear-gradient(135deg, #ff3a29, #ff6f61);
+            transform: scale(1.05);
+        }
+    
+        button:focus {
+            outline: none;
+        }
+    
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            align-items: center; /* Assicurati che gli input e i bottoni siano allineati */
+        }
+    
+        .empty-message {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+    
+        #clear-list-btn {
+            background: #FF3A29;
+            color: white;
+        }
+    
+        #clear-list-btn:hover {
+            background: #e5301a;
+        }
+    
+        /* Media Queries per dispositivi mobili */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+    
+            input[type="text"] {
+                width: calc(100% - 90px);
+            }
+    
+            button {
+                font-size: 13px;
+                padding: 7px 14px;
+            }
+        }
+    </style>
+    
+    
+    
 </head>
 <body>
-    <h1>La tua Lista della Spesa</h1>
-    {% if lista %}
-    <ul>
-        {% for elemento in lista %}
-        <li>
-            {{ elemento }}
-            <form action="/rimuovi/{{ loop.index0 }}" method="post" style="display:inline;">
-                <button type="submit">Rimuovi</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
-    <form action="/svuota" method="post">
-        <button type="submit" style="margin-top: 10px;">Svuota la lista</button>
-    </form>
-    {% else %}
-    <p>La lista è vuota.</p>
-    {% endif %}
+    <h1>Lista spesa</h1>
     <form action="/aggiungi" method="post">
         <input type="text" name="elemento" placeholder="Aggiungi un elemento" required>
         <button type="submit">Aggiungi</button>
     </form>
+    <br>
+    <div id = "cosa">
+        {% if lista_spesa %}
+        <ul>
+            {% for elemento in lista_spesa %}
+            <li>
+                {{ elemento.elemento }}
+                <form action="/rimuovi/{{ elemento.id }}" method="post" style="display:inline;">
+                <button type="submit">Rimuovi</button></form>
+            </li>
+            {% endfor %}
+        {% else %}
+            <p>La lista è vuota.</p>
+        {% endif %}
+        </ul>
+        <form action="/svuota" method="post" style="display:inline;">
+            <button type="submit">Svuota lista</button>
+        </form>
+    </div>
+    <br>
 </body>
-</html>
